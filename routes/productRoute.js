@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import upload from "../config/multerConfig.js";
+// import upload from "../config/multerConfig.js";
 
 import {
     createProduct,
