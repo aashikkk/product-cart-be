@@ -6,10 +6,9 @@ const productSchema = new Schema(
             type: String,
             required: true,
         },
-        image: [
+        images: [
             {
                 type: String,
-                required: true,
             },
         ],
         name: {
@@ -19,7 +18,6 @@ const productSchema = new Schema(
         quantity: {
             type: Number,
             required: true,
-            defaultValue: 1,
         },
         description: {
             type: String,
