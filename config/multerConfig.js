@@ -1,17 +1,13 @@
 import multer from "multer";
-import path, { dirname } from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 // Configure storage
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, "../src/images/")); // Save images to the "images" folder
+        cb(null, "../frontend/src/images/"); // Save images to the "images" folder
     },
     filename: function (req, file, cb) {
-        cb(null, `${Date.now()}-${file.originalname}`); // Unique filename
+        const uniqueName = `${Date.now()}-${file.originalname}`;
+        cb(null, uniqueName); // Unique filename
     },
 });
 

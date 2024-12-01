@@ -73,7 +73,8 @@ export const createProduct = async (req, res) => {
     // Handle Image Upload
     let images = [];
     if (req.files) {
-        images = req.files.map((file) => file.path);
+        // Save as fileName
+        images = req.files.map((file) => file.filename);
     } else {
         return res.status(400).json({ message: "No images uploaded" });
     }
