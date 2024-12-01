@@ -1,6 +1,5 @@
 import Product from "../models/productModel.js";
 import mongoose from "mongoose";
-import upload from "../config/multerConfig.js";
 
 export const getProducts = async (req, res) => {
     try {
