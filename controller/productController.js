@@ -61,7 +61,7 @@ export const getProductById = async (req, res) => {
 export const createProduct = async (req, res) => {
     console.log("Request body:", req.body);
     console.log("Request files:", req.files);
-    
+
     const { sku, name, quantity, description, price } = req.body;
 
     // Validate required fields
