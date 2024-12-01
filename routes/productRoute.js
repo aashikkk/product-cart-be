@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-// import upload from "../config/multerConfig.js";
+import upload from "../config/multerConfig.js";
 
 import {
     createProduct,
@@ -14,7 +14,7 @@ const router = express.Router();
 
 router.get("/", getProducts);
 router.get("/:id", getProductById);
-router.post("/", createProduct);
+router.post("/", upload.array("images", 3), createProduct);
 router.put("/:id", updateProduct);
 router.delete("/:id", deleteProduct);
 

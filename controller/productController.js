@@ -1,6 +1,6 @@
 import Product from "../models/productModel.js";
 import mongoose from "mongoose";
-// import upload from "../config/multerConfig.js";
+import upload from "../config/multerConfig.js";
 
 export const getProducts = async (req, res) => {
     try {
@@ -33,21 +33,60 @@ export const getProductById = async (req, res) => {
     }
 };
 
-export const createProduct = async (req, res) => {
-    const product = req.body; // user will send this data
+// export const createProduct = async (req, res) => {
+//     const product = req.body; // user will send this data
 
-    if (
-        !product.sku ||
-        !product.name ||
-        !product.image ||
-        !product.quantity ||
-        !product.description ||
-        !product.price
-    ) {
-        return res.status(400).json({ message: "Please provide all fields" });
+//     if (
+//         !product.sku ||
+//         !product.name ||
+//         !product.image ||
+//         !product.quantity ||
+//         !product.description ||
+//         !product.price
+//     ) {
+//         return res.status(400).json({ message: "Please provide all fields" });
+//     }
+
+//     const newProduct = new Product(product);
+
+//     try {
+//         await newProduct.save();
+//         res.status(201).json({ success: true, data: newProduct });
+//     } catch (error) {
+//         console.error(`Error in Create product: ${error.message}`);
+//         res.status(500).json({ success: false, message: "Server Error" });
+//     }
+// };
+
+export const createProduct = async (req, res) => {
+    console.log("Request body:", req.body);
+    console.log("Request files:", req.files);
+    
+    const { sku, name, quantity, description, price } = req.body;
+
+    // Validate required fields
+    if (!sku || !name || !quantity || !description || !price) {
+        return res
+            .status(400)
+            .json({ message: "Please provide all fields -be" });
     }
 
-    const newProduct = new Product(product);
+    // Handle Image Upload
+    let images = [];
+    if (req.files) {
+        images = req.files.map((file) => file.path);
+    } else {
+        return res.status(400).json({ message: "No images uploaded" });
+    }
+
+    const newProduct = new Product({
+        sku,
+        images,
+        name,
+        quantity,
+        description,
+        price,
+    });
 
     try {
         await newProduct.save();
@@ -57,42 +96,6 @@ export const createProduct = async (req, res) => {
         res.status(500).json({ success: false, message: "Server Error" });
     }
 };
-
-// export const createProduct = async (req, res) => {
-//     upload(req, res, async (err) => {
-//         if (err) {
-//             console.error(`Multer Error: ${err.message}`);
-//             return res
-//                 .status(400)
-//                 .json({ success: false, message: err.message });
-//         }
-//         const { sku, name, quantity, description, price } = req.body;
-//         // Validate required fields
-//         if (!sku || !name || !quantity || !description || !price) {
-//             return res
-//                 .status(400)
-//                 .json({ message: "Please provide all fields" });
-//         }
-//         // Handle uploaded images
-//         const imagePaths = req.files.map((file) => file.path); // Get file paths
-//         try {
-//             // Create a new product
-//             const newProduct = new Product({
-//                 sku,
-//                 name,
-//                 quantity,
-//                 description,
-//                 price,
-//                 image: imagePaths, // Add image paths to the product
-//             });
-//             await newProduct.save();
-//             res.status(201).json({ success: true, data: newProduct });
-//         } catch (error) {
-//             console.error(`Error in Create product: ${error.message}`);
-//             res.status(500).json({ success: false, message: "Server Error" });
-//         }
-//     });
-// };
 
 export const updateProduct = async (req, res) => {
     const { id } = req.params;
