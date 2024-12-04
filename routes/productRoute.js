@@ -8,10 +8,12 @@ import {
     getProductById,
     getProducts,
     updateProduct,
+    searchProducts,
 } from "../controller/productController.js";
 
 const router = express.Router();
 
+router.get("/search", searchProducts);
 router.get("/", getProducts);
 router.get("/:id", getProductById);
 router.post("/", upload.array("images", 3), createProduct);
