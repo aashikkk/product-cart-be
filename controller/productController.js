@@ -36,7 +36,7 @@ export const createProduct = async (req, res) => {
     console.log("Request body:", req.body);
     console.log("Request files:", req.files);
 
-    const { sku, name, quantity, description, price } = req.body;
+    const { sku, name, quantity, description, price, mainImage } = req.body;
 
     // Validate required fields
     if (!sku || !name || !quantity || !description || !price) {
@@ -54,9 +54,13 @@ export const createProduct = async (req, res) => {
         return res.status(400).json({ message: "No images uploaded" });
     }
 
+    // set mainImage to the first image if not provided
+    const mainImageToUse = mainImage || images[0];
+
     const newProduct = new Product({
         sku,
         images,
+        mainImage: mainImageToUse,
         name,
         quantity,
         description,
@@ -75,7 +79,7 @@ export const createProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
     const { id } = req.params;
 
-    const { sku, name, quantity, description, price } = req.body;
+    const { sku, name, quantity, description, price, mainImage } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({ message: "Invalid Product ID" });
@@ -94,9 +98,13 @@ export const updateProduct = async (req, res) => {
             images = [...images, ...newImages];
         }
 
+        // Set mainImage to the first image if not provided
+        const mainImageToUse = mainImage || images[0];
+
         const updatedProductData = {
             sku,
             images,
+            mainImage: mainImageToUse,
             name,
             quantity,
             description,
